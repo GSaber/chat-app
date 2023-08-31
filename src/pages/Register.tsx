@@ -46,7 +46,7 @@ function Register() {
     <div className="formContainer">
       <div className="formWrapper">
         <span className="logo">CHAT-APP</span>
-        <span className="title">Register</span>
+        <span className="title">REGISTER</span>
         <form onSubmit={handleSubmit}>
           <input type="text" placeholder="Display name" onChange={(e) => {}} />
           <input type="email" placeholder="Email" onChange={(e) => {}} />
