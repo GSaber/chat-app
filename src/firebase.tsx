@@ -23,4 +23,4 @@ export const auth = getAuth();
 // Get a reference to the storage service, which is used to create references in your storage bucket
 export const storage = getStorage();
 // Initialize Cloud Firestore and get a reference to the service
-export const de = getFirestore();
+export const db = getFirestore();
