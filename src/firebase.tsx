@@ -2,7 +2,7 @@
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getStorage } from "firebase/storage";
-import { getFirestore } from "firebase/firestore";
+import { doc, getFirestore, setDoc } from "firebase/firestore";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -16,11 +16,11 @@ const firebaseConfig = {
   appId: "1:475496594584:web:c6f65c463f97f7af0ae4ed",
 };
 
-// Initialize Firebase Authentication and get a reference to the service
+// Initialize Firebase
 export const app = initializeApp(firebaseConfig);
 //Call authentification function
 export const auth = getAuth();
-// Get a reference to the storage service, which is used to create references in your storage bucket
+// Create a root reference
 export const storage = getStorage();
 // Initialize Cloud Firestore and get a reference to the service
-export const db = getFirestore();
+export const db = getFirestore(app);

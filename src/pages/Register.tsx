@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { auth, storage, db } from "../firebase";
+import { auth, db, storage } from "../firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { doc, setDoc } from "firebase/firestore";
 
@@ -22,29 +22,18 @@ function Register() {
 
       const uploadTask = uploadBytesResumable(storageRef, file);
 
-      uploadTask.on(
-        "state_changed",
-
-        (error) => {
-          // Handle unsuccessful uploads
-          setErr(true);
-        },
-        () => {
-          getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
-            await updateProfile(res.user, {
-              displayName,
-              photoURL: downloadURL,
-            });
-            await setDoc(doc(db, "users", res.user.uid), {
-              uid: res.user.uid,
-              displayName,
-              email,
-              photoURL: downloadURL,
-            });
-          });
-          console.log(setDoc);
-        }
-      );
+      getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
+        await updateProfile(res.user, {
+          displayName,
+          photoURL: downloadURL,
+        });
+        await setDoc(doc(db, "users", res.user.uid), {
+          uid: res.user.uid,
+          displayName,
+          email,
+          photoURL: downloadURL,
+        });
+      });
     } catch (err) {
       setErr(true);
     }
@@ -55,15 +44,14 @@ function Register() {
         <span className="logo">CHAT-APP</span>
         <span className="title">REGISTER</span>
         <form onSubmit={handleSubmit}>
-          <input type="text" placeholder="Display name" onChange={(e) => {}} />
-          <input type="email" placeholder="Email" onChange={(e) => {}} />
-          <input type="password" placeholder="password" onChange={(e) => {}} />
+          <input type="text" placeholder="Display name" />
+          <input autoComplete="on" type="email" placeholder="Email" />
           <input
-            style={{ display: "none" }}
-            type="file"
-            id="avatar"
-            onChange={(e) => {}}
+            autoComplete="current-password"
+            type="password"
+            placeholder="password"
           />
+          <input style={{ display: "none" }} type="file" id="avatar" />
           <label htmlFor="avatar">
             <img src={require("../img/AddAvatar.png")} alt="" />
             <span>Add Avatar</span>
