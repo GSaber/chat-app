@@ -3,9 +3,13 @@ import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth, db, storage } from "../firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { doc, setDoc } from "firebase/firestore";
-
+interface error {
+  code: number;
+  message: string;
+  error: [{ message: string; domain: string; reason: string }];
+}
 function Register() {
-  const [err, setErr] = useState(false);
+  const [err, setErr] = useState<error>();
   const handleSubmit = async (e: {
     preventDefault: () => void;
     target: any;
@@ -35,13 +39,13 @@ function Register() {
         });
       });
     } catch (err) {
-      setErr(true);
+      setErr(err as error);
     }
   };
   return (
     <div className="formContainer">
       <div className="formWrapper">
-        <span className="logo">CHAT-APP</span>
+        <span className="logo">CHAT_APP</span>
         <span className="title">REGISTER</span>
         <form onSubmit={handleSubmit}>
           <input type="text" placeholder="Display name" />
@@ -57,7 +61,7 @@ function Register() {
             <span>Add Avatar</span>
           </label>
           <button>Sign up</button>
-          {err && <span>Something went wrong</span>}
+          {err && <span className="error">{"Error: " + err.code}</span>}
         </form>
         <p>You do have an account? Login</p>
       </div>
