@@ -4,18 +4,11 @@ import { auth, db, storage } from "../firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { doc, setDoc } from "firebase/firestore";
 import { useNavigate } from "react-router";
-interface error {
-  code: number;
-  message: string;
-  error: [{ message: string; domain: string; reason: string }];
-}
+
 function Register() {
-  const [err, setErr] = useState<error>();
+  const [err, setErr] = useState(false);
   const navigate = useNavigate();
-  const handleSubmit = async (e: {
-    preventDefault: () => void;
-    target: any;
-  }) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const displayName = e.target[0].value;
     const email = e.target[1].value;
@@ -28,22 +21,33 @@ function Register() {
 
       const uploadTask = uploadBytesResumable(storageRef, file);
 
-      getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
-        await updateProfile(res.user, {
-          displayName,
-          photoURL: downloadURL,
-        });
-        await setDoc(doc(db, "users", res.user.uid), {
-          uid: res.user.uid,
-          displayName,
-          email,
-          photoURL: downloadURL,
-        });
-        await setDoc(doc(db, "userChats", res.user.uid), {});
-        navigate("/");
-      });
+      uploadTask.on(
+        (error) => {
+          // Handle unsuccessful uploads
+          setErr(true);
+        },
+        () => {
+          // Handle successful uploads on complete
+          // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+          getDownloadURL(uploadTask.snapshot.ref).then(async (downloadURL) => {
+            await updateProfile(res.user, {
+              displayName,
+              photoURL: downloadURL,
+            }).then(async () => {
+              await setDoc(doc(db, "users", res.user.uid), {
+                uid: res.user.uid,
+                displayName,
+                email,
+                photoURL: downloadURL,
+              });
+              await setDoc(doc(db, "userChats", res.user.uid), {});
+              navigate("/");
+            });
+          });
+        }
+      );
     } catch (err) {
-      setErr(err as error);
+      setErr(true);
     }
   };
   return (
@@ -65,7 +69,7 @@ function Register() {
             <span>Add Avatar</span>
           </label>
           <button>Sign up</button>
-          {err && <span className="error">{"Error: " + err.code}</span>}
+          {err && <span className="error">{"Something went wrong"}</span>}
         </form>
         <p>You do have an account? Login</p>
       </div>
