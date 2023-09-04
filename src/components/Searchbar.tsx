@@ -8,7 +8,7 @@ const Searchbar = () => {
       </div>
       <div className="userChat">
         <img
-          src="https://scontent.ftun15-1.fna.fbcdn.net/v/t39.30808-6/364759998_10230799636439125_4635250095707179909_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=09cbfe&_nc_ohc=SIpbI1wt2EwAX9YWnL2&_nc_ht=scontent.ftun15-1.fna&oh=00_AfDz5yTLgptYRrBrPR9wW3UwJ4BvFtqMWG-zHOIv_9o5pw&oe=64F4F66E"
+          src="https://images.pexels.com/photos/15242091/pexels-photo-15242091/free-photo-of-gens-centrale-feuilles-debout.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
           alt=""
         />
         <div className="userChatInfo">
