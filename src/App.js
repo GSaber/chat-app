@@ -7,8 +7,6 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 function App() {
   const currentUser = useContext(AuthContext);
-  console.log(currentUser);
-  // eslint-disable-next-line
   const ProtectedRoute = ({ children }) => {
     if (!currentUser.currentUser) {
       return <Navigate to="/login" replace={true} />;
