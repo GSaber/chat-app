@@ -3,10 +3,10 @@ import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth, db, storage } from "../firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { doc, setDoc } from "firebase/firestore";
-import { useNavigate } from "react-router";
+import { useNavigate, Link } from "react-router-dom";
 
 function Register() {
-  const [err, setErr] = useState(false);
+  const [err, setErr] = useState();
   const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -24,7 +24,7 @@ function Register() {
       uploadTask.on(
         (error) => {
           // Handle unsuccessful uploads
-          setErr(true);
+          setErr(error);
         },
         () => {
           // Handle successful uploads on complete
@@ -33,21 +33,21 @@ function Register() {
             await updateProfile(res.user, {
               displayName,
               photoURL: downloadURL,
-            }).then(async () => {
-              await setDoc(doc(db, "users", res.user.uid), {
-                uid: res.user.uid,
-                displayName,
-                email,
-                photoURL: downloadURL,
-              });
-              await setDoc(doc(db, "userChats", res.user.uid), {});
-              navigate("/");
             });
+
+            await setDoc(doc(db, "users", res.user.uid), {
+              uid: res.user.uid,
+              displayName,
+              email,
+              photoURL: downloadURL,
+            });
+            await setDoc(doc(db, "userChats", res.user.uid), {});
+            navigate("/");
           });
         }
       );
     } catch (err) {
-      setErr(true);
+      setErr(err.code);
     }
   };
   return (
@@ -69,9 +69,11 @@ function Register() {
             <span>Add Avatar</span>
           </label>
           <button>Sign up</button>
-          {err && <span className="error">{"Something went wrong"}</span>}
+          {err && <span className="error">{err}</span>}
         </form>
-        <p>You do have an account? Login</p>
+        <p>
+          You do have an account? <Link to="/login">Login</Link>{" "}
+        </p>
       </div>
     </div>
   );

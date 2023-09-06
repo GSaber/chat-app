@@ -8,15 +8,12 @@ function Home() {
   const currentUser = useContext(AuthContext);
 
   return (
-    <>
-      {!currentUser && <Navigate to="login" replace={true} />}
-      <div className="home">
-        <div className="container">
-          <Sidebar />
-          <Chat />
-        </div>
+    <div className="home">
+      <div className="container">
+        <Sidebar />
+        <Chat />
       </div>
-    </>
+    </div>
   );
 }
 
