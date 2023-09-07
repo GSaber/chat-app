@@ -44,6 +44,7 @@ const Searchbar = () => {
       currentUser.uid > user.uid
         ? currentUser.uid + user.uid
         : user.uid + currentUser.uid;
+
     try {
       const res = await getDoc(doc(db, "chats", combinedId));
       if (!res.exists()) {
@@ -67,7 +68,9 @@ const Searchbar = () => {
           [combinedId + ".date"]: serverTimestamp(),
         });
       }
-    } catch (err) {}
+    } catch (err) {
+      /* continue regardless of error */
+    }
     //create user chats
     setUser(null);
     setUserName("");
