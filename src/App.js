@@ -1,7 +1,7 @@
 import "./style.scss";
 import { useContext } from "react";
 import { AuthContext } from "./context/AuthContext";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { HashRouter, Routes, Route, Navigate } from "react-router-dom";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -15,7 +15,7 @@ function App() {
     }
   };
   return (
-    <BrowserRouter>
+    <HashRouter>
       <Routes>
         <Route path="/">
           <Route
@@ -30,7 +30,7 @@ function App() {
           <Route path="register" element={<Register />} />
         </Route>
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 
